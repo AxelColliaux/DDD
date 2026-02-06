@@ -1,10 +1,12 @@
-# Ubiquitous Language – Version 1
+# Ubiquitous Language – Version 2
+
+## Glossaire
 
 | Terme | Définition métier (2–4 phrases) | Exemple concret (1–2 phrases) |
 | --- | --- | --- |
 | Client | Personne (particulier ou professionnel) qui utilise la plateforme pour acheter des produits. Le Client peut naviguer dans le catalogue, constituer un panier, passer commande, payer et suivre la livraison. Il est l’initiateur principal du flux d’achat et peut aussi initier un retour. | Le client recherche un casque audio, l’ajoute au panier puis paye une livraison express J+1. |
 | CatalogueProduit | Ensemble des produits proposés à la vente, consultables via recherche, catégories et filtres. Le catalogue expose des informations commerciales (prix, disponibilité, description) et doit être cohérent avec la disponibilité réelle. Il sert de point d’entrée au parcours d’achat. | Le client parcourt le catalogue et compare plusieurs casques sans fil. |
-| Produit | Article vendable identifié de manière unique (SKU) avec des caractéristiques (nom, marque, prix, poids, etc.). Un Produit peut avoir des contraintes logistiques (fragile, taille) qui influencent la préparation et la livraison. La même référence Produit peut être stockée dans plusieurs entrepôts. | Le « casque audio sans fil » et la « housse de protection » sont deux produits distincts. |
+| Produit | Article vendable identifié de manière unique (SKU) avec des caractéristiques (nom, marque, prix, poids, etc.). Un Produit peut avoir des contraintes logistiques (fragile, taille) qui influencent la préparation et la livraison. La même référence Produit peut être stockée dans plusieurs entrepôts. Ce terme est utilisé dans plusieurs contextes avec des représentations différentes (voir Termes par contexte). | Le « casque audio sans fil » et la « housse de protection » sont deux produits distincts. |
 | FicheProduit | Page/representation détaillée d’un Produit destinée au Client (description, caractéristiques, avis, prix, disponibilité). Elle sert à informer avant l’achat et à réduire les retours en clarifiant la compatibilité et les usages. La FicheProduit doit refléter des informations à jour. | Le client lit les avis et vérifie la compatibilité de la housse avant de l’ajouter. |
 | Panier | Conteneur temporaire des articles sélectionnés par un Client avant validation. Le Panier permet de modifier quantités, supprimer des articles et visualiser le total estimé (hors/avec livraison selon l’étape). Un panier n’est pas une commande tant qu’il n’a pas été validé. | Le client ajoute le casque et la housse, puis vérifie le total avant de valider. |
 | LignePanier | Élément d’un Panier représentant un Produit et une quantité (et éventuellement des options). La LignePanier permet de calculer le total, de vérifier les disponibilités et de préparer la conversion en lignes de commande. Elle évolue tant que le panier n’est pas validé. | La ligne « housse de protection x1 » est une LignePanier. |
@@ -12,7 +14,7 @@
 | LigneCommande | Élément d’une Commande représentant un Produit, une quantité et un prix appliqué à l’achat. Elle fige ce qui a été acheté au moment de la commande (contrairement au panier). Elle sert de base à la préparation, à la facturation et aux retours partiels. | La commande contient une LigneCommande « housse x1 » remboursée lors du retour. |
 | AdresseLivraison | Informations nécessaires à la livraison (nom, rue, code postal, ville, pays, compléments). L’AdresseLivraison doit être suffisamment précise pour éviter les échecs de livraison. Elle est associée à la commande et utilisée par le transport et le livreur. | Le client saisit son adresse pour la livraison express J+1. |
 | ModeLivraison | Option choisie par le Client pour recevoir sa commande (standard, express, point relais…). Le ModeLivraison détermine le délai cible, le coût, et parfois la manière de traiter la préparation. Il est fixé sur la commande avant expédition. | Le client choisit « express à J+1 ». |
-| Paiement | Processus de règlement d’une commande via un moyen accepté (carte bancaire, etc.). Le Paiement peut être initié, autorisé, capturé, refusé ou remboursé selon le cycle de vie. Le paiement est généralement confirmé par un prestataire externe. | Le client paye par carte et le prestataire autorise la transaction. |
+| Paiement | Processus de règlement d'une commande via un moyen accepté (carte bancaire, etc.). Le Paiement peut être initié, autorisé, capturé, refusé ou remboursé selon le cycle de vie. Le paiement est confirmé par un prestataire externe via une couche anticorruption (ACL). | Le client paye par carte et le prestataire autorise la transaction. |
 | AutorisationPaiement | Décision du prestataire de paiement indiquant que la transaction est acceptée (fonds/contrôle OK) ou refusée. Une autorisation positive est un prérequis pour confirmer la commande selon la politique métier. Une autorisation négative peut déclencher une annulation. | Le paiement est refusé : la commande est annulée et le client est notifié. |
 | Stock | Quantité disponible d’un Produit dans un entrepôt donné, à un instant donné. Le Stock doit être fiable et à jour pour éviter la survente et les annulations. Il est impacté par les réservations et les entrées/sorties (préparation, retours). | Le système réserve 1 casque et 1 housse dans l’entrepôt sélectionné. |
 | RéservationStock | Blocage temporaire d’une quantité de Stock pour une Commande afin de garantir la préparation. La RéservationStock évite que la même unité soit vendue deux fois pendant le pic de commandes. Elle peut être libérée si la commande est annulée ou expire. | Après paiement autorisé, le stock des deux articles est réservé avant préparation. |
@@ -27,4 +29,42 @@
 | Retour | Processus inverse permettant au Client de renvoyer un produit (rétractation, incompatibilité, défaut). Un Retour est tracé (motif, date, état à réception) et peut conduire à remise en stock ou destruction. Il peut être partiel (une ligne de commande). | Deux jours après, le client initie un retour uniquement pour la housse non compatible. |
 | EtiquetteRetour | Étiquette prépayée générée par le système pour permettre l’acheminement du produit retourné vers l’entrepôt. Elle standardise le transport retour et permet le suivi du flux inverse. Elle est liée à un dossier de retour. | Le système génère une étiquette de retour prépayée pour la housse. |
 | Remboursement | Opération financière qui restitue au Client tout ou partie du montant payé, généralement après validation du retour ou d’un incident. Le Remboursement doit respecter les délais et règles (montant, moyen de paiement, conditions). Il clôture souvent le dossier de retour. | Après réception et contrôle de la housse, le client est remboursé sous 48h. |
-| AvisClient | Évaluation laissée par un Client après une livraison/expérience d’achat (note + commentaire). Les avis alimentent les indicateurs de satisfaction et influencent le catalogue (décisions commerciales). Ils doivent être associés à une commande/livraison réelle pour être crédibles. | Après la livraison, le client note la rapidité de la livraison et commente l’emballage. |
+| AvisClient | Évaluation laissée par un Client après une livraison/expérience d'achat (note + commentaire). Les avis alimentent les indicateurs de satisfaction et influencent le catalogue (décisions commerciales). Ils doivent être associés à une commande/livraison réelle pour être crédibles. | Après la livraison, le client note la rapidité de la livraison et commente l'emballage. |
+| StatutCommande | État courant d'une Commande dans son cycle de vie. Les transitions sont : Créée → Validée → EnPréparation → Expédiée → Livrée, avec des branches alternatives (Annulée, Retournée). Chaque changement de statut est piloté par un événement métier. | Après scan par le livreur, le statut passe de « Expédiée » à « En cours de livraison ». |
+| RuptureStock | Situation où la quantité disponible d'un Produit est insuffisante pour honorer une réservation ou une commande. La rupture déclenche un événement `StockInsuffisant` et peut entraîner une annulation ou une mise en attente. Elle doit être détectée au plus tôt pour informer le client. | Lors de la réservation, la housse est indisponible : le client est notifié immédiatement. |
+| MotifRetour | Raison invoquée par le Client pour justifier un retour (rétractation, produit défectueux, non-conformité, erreur de commande). Le motif conditionne le traitement du retour (remise en stock ou destruction) et l'éventuelle prise en charge des frais de retour. | Le client sélectionne « produit non compatible » comme motif de retour pour la housse. |
+| ContrôleRetour | Étape d'inspection du produit retourné à sa réception en entrepôt. Le contrôle détermine si le produit est en état d'être remis en stock ou s'il doit être détruit/recyclé. Il conditionne le déclenchement du remboursement. | La housse est contrôlée à réception : état neuf, remise en stock validée. |
+
+## Termes par contexte
+
+| Terme | Contexte principal | Commentaire |
+|-------|-------------------|-------------|
+| CatalogueProduit | ContexteCatalogue | Agrégat racine du catalogue, point d'entrée de la recherche |
+| Produit | ContexteCatalogue | Défini dans le Catalogue ; projeté en tant que référence simplifiée (id, nom, prix) dans Commande et Stock |
+| FicheProduit | ContexteCatalogue | Exclusif au catalogue, consommé en lecture par le front-end |
+| AvisClient | ContexteCatalogue | Rattaché à un produit du catalogue, exploité par la Direction |
+| Panier | ContexteCommande | Pré-commande, existe uniquement dans le contexte Commande |
+| LignePanier | ContexteCommande | Sous-élément du Panier, converti en LigneCommande à la validation |
+| Commande | ContexteCommande | Agrégat racine central — référencé (par id) dans Livraison, Retour et Paiement |
+| StatutCommande | ContexteCommande | Enum/Value Object interne au cycle de vie de la Commande |
+| LigneCommande | ContexteCommande | Référencé par le ContexteRetour pour les retours partiels |
+| AdresseLivraison | ContexteCommande | Saisi lors de la commande, transmis en lecture au ContexteLivraison |
+| ModeLivraison | ContexteCommande | Choisi par le client, influence le ContexteLivraison (délai, coût) |
+| Notification | ContexteCommande | Émise en réaction aux événements métier (commande, livraison, retour) |
+| Paiement | ContextePaiement | Géré via ACL — le ContexteCommande n'accède qu'à un résultat (accepté/refusé) |
+| AutorisationPaiement | ContextePaiement | Réponse du prestataire externe, traduite par la couche anticorruption |
+| Remboursement | ContextePaiement | Déclenché par le ContexteRetour, exécuté par la passerelle externe |
+| Stock | ContexteStock | Agrégat racine — quantité disponible par Produit et par Entrepôt |
+| RéservationStock | ContexteStock | Créée en réaction à `CommandeCréée`, libérée si annulation |
+| RuptureStock | ContexteStock | Détectée lors de la réservation, publiée comme événement `StockInsuffisant` |
+| Entrepot | ContexteStock | Lieu physique de stockage, partagé en lecture par ContexteLivraison |
+| BonPreparation | ContexteLivraison | Généré à partir d'une commande validée, consommé par le Préparateur |
+| Picking | ContexteLivraison | Étape opérationnelle interne à l'entrepôt |
+| Colis | ContexteLivraison | Unité d'expédition, identifiée par un code-barres unique |
+| EtiquetteExpedition | ContexteLivraison | Apposée sur le Colis, contient les infos de routage |
+| SuiviLivraison | ContexteLivraison | Événements de progression publiés vers le ContexteCommande |
+| PreuveLivraison | ContexteLivraison | Collectée par le Livreur, associée au Colis livré |
+| Retour | ContexteRetour | Agrégat racine du flux inverse, référence une Commande par id |
+| MotifRetour | ContexteRetour | Value Object qualifiant la raison du retour |
+| EtiquetteRetour | ContexteRetour | Générée pour le transport inverse vers l'entrepôt |
+| ContrôleRetour | ContexteRetour | Inspection en entrepôt déterminant remise en stock ou destruction |
