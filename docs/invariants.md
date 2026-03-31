@@ -8,7 +8,7 @@
   - Entités : Commande (root), LigneCommande
   - Objets Valeur : AdresseLivraison, ModeLivraison, Montant, StatutCommande
 
-| Invariant | Description métier (3–4 phrases) | Conséquence si non respecté |
+| Invariant | Description métier | Conséquence si non respecté |
 | --- | --- | --- |
 | Au moins une LigneCommande | Une Commande ne peut pas exister sans contenu : elle doit porter au minimum une LigneCommande valide. Cela garantit qu’une commande correspond à un achat réel et évite les flux “fantômes” (paiement, réservation, préparation) sur une commande vide. La vérification se fait à la création et à chaque modification des lignes (suppression, annulation partielle). En cas d’annulation totale, la commande doit changer de statut plutôt que devenir “vide”. | Facturation incohérente, réservation de stock inutile, préparation impossible et erreurs de reporting (CA, conversion). |
 | MontantTotal cohérent avec les lignes + livraison | Le MontantTotal d’une Commande doit être égal à la somme des (prix × quantité) de chaque LigneCommande, à laquelle s’ajoutent les frais liés au ModeLivraison. Toute modification des lignes (quantité, prix appliqué, suppression) doit entraîner un recalcul déterministe du total. Cette règle empêche qu’un client paye un montant différent de ce qui est réellement commandé. Elle sert aussi de base à des remboursements partiels (retour d’une ligne). | Sous/sur-facturation, remboursements erronés, litiges client et impossibilité d’auditer correctement les montants. |
@@ -22,7 +22,7 @@
   - Entités : Stock (root), RéservationStock
   - Objets Valeur : Quantité (pour disponible/réservée), IdentifiantProduit (SKU), EntrepotId
 
-| Invariant | Description métier (3–4 phrases) | Conséquence si non respecté |
+| Invariant | Description métier | Conséquence si non respecté |
 | --- | --- | --- |
 | QuantitéDisponible non négative | La QuantitéDisponible ne peut jamais devenir négative. Toute demande de réservation doit vérifier la disponibilité avant de décrémenter et doit refuser la réservation si le stock est insuffisant. Cette règle est essentielle en cas de concurrence (pics de commandes) et doit être appliquée de manière atomique. En cas d’échec, un événement métier (ex : StockInsuffisant) doit être produit. | Survente, annulations tardives, perte de confiance client, surcharge du support et coûts logistiques inutiles. |
 | Conservation du stock : disponible + réservé cohérent | La somme QuantitéDisponible + QuantitéRéservée doit rester cohérente avec le stock total “contrôlé” par l’entrepôt pour ce produit. Une réservation transfère une quantité de Disponible vers Réservé ; une libération (annulation/expiration) fait l’inverse. Une expédition diminue le total et doit être reflétée sans “créer” ou “perdre” des unités. Les mises à jour doivent être atomiques pour éviter des états intermédiaires incohérents. | Inventaire faux, réapprovisionnement mal piloté, écarts d’audit, et erreurs d’allocation d’entrepôt (mauvais choix de site). |
