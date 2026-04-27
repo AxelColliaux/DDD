@@ -57,8 +57,8 @@ Un client finalise son achat après avoir constitué son panier. Ce scénario il
      │                │                  │    <<Commande>>     │                  │                  │
      │                │                  │<────────────────────│                  │                  │
      │                │                  │                     │                  │                  │
-     │                │                  │        publish: CommandeInitiee       │                  │
-     │                │                  │─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ >│                  │
+     │                │                  │        publish: CommandeInitiee        │                  │
+     │                │                  │ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ >│                  │
      │                │                  │                     │                  │                  │
      │                │                  │                     │  InitierPaiement │                  │
      │                │                  │                     │  (prestataire)   │                  │
@@ -66,11 +66,11 @@ Un client finalise son achat après avoir constitué son panier. Ce scénario il
      │                │                  │                     │                  │  │ Appel externe │
      │                │                  │                     │                  │<─┘               │
      │                │                  │                     │                  │                  │
-     │                │                  │          publish: PaiementAutorise    │                  │
-     │                │                  │<─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ │                  │
+     │                │                  │          publish: PaiementAutorise     │                  │
+     │                │                  │<─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─│                  │
      │                │                  │                     │                  │                  │
      │                │                  │                 publish: PaiementAutorise                 │
-     │                │                  │─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ >│
+     │                │                  │─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ - >│
      │                │                  │                     │                  │                  │
      │                │                  │                     │                  │   reserver()     │
      │                │                  │                     │                  │                  │──┐
@@ -78,7 +78,7 @@ Un client finalise son achat après avoir constitué son panier. Ce scénario il
      │                │                  │                     │                  │                  │<─┘
      │                │                  │                     │                  │                  │
      │                │                  │                         publish: StockReserve             │
-     │                │                  │<─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─│
+     │                │                  │<─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ │
      │                │                  │                     │                  │                  │
      │                │                  │    confirmer()      │                  │                  │
      │                │                  │────────────────────>│                  │                  │
